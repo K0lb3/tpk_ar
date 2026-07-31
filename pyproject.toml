@@ -1,35 +1,31 @@
 [project]
-name = "tpk_helper"
-authors = [{ name = "Rudolf Kolbe", email = "rkolbe96@gmail.com" }]
-description = "A Unity extraction and patching package"
+name = "tpk"
+authors = [{ name = "Rudolf Kolbe", email = "rkolbe96@tuta.io" }]
+description = "A package for parsing type tree packages (TPK)"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
 dependencies = [
-    # block compression/decompression
-    "lz4",    # BundleFile block compression
-    "brotli", # WebFile compression
-    # better classes
-    "attrs",
+    "lz4",
+    "brotli",
+    "typing_extensions",
 ]
 dynamic = ["version"]
 
 [project.scripts]
-tpk_helper = "tpk_helper.cli:main"
+tpk_helper = "tpk.cli:main"
 
 [project.optional-dependencies]
 # optional dependencies must be lowercase/normalized
-ttgen = ["typetreegeneratorapi>=0.0.10"]
-full = ["unitypy[ttgen]"]
-tests = ["pytest", "psutil", "tpk-helper[full]"]
-dev = ["ruff", "unitypy[tests]"]
+tests = ["pytest"]
+dev = ["ruff", "tpk[tests]"]
 
 [project.urls]
-"Homepage" = "https://github.com/K0lb3/UnityPy"
-"Bug Tracker" = "https://github.com/K0lb3/UnityPy/issues"
+"Homepage" = "https://github.com/K0lb3/tpk"
+"Bug Tracker" = "https://github.com/K0lb3/tpk/issues"
 
 [tool.setuptools.dynamic]
-version = { attr = "tpk_helper.__version__" }
+version = { attr = "tpk.__version__" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
