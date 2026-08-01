@@ -6,4 +6,4 @@ from .string import TpkCommonString, TpkCommonStringV1, TpkCommonStringV2, TpkSt
 from .unity import TpkClassInformation, TpkUnityClass
 from .unityversion import UnityVersion
 
-version = __version__ = "0.2.1"
+version = __version__ = "0.2.3"

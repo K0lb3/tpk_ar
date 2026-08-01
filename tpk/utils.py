@@ -1,7 +1,7 @@
 import lzma
 from io import BytesIO
 from struct import Struct
-from typing import BinaryIO, Iterable, List, Literal, Tuple, TypeVar
+from typing import BinaryIO, Iterable, List, Literal, Optional, Tuple, TypeVar
 from urllib.request import urlopen
 from zipfile import ZipFile
 
@@ -9,7 +9,6 @@ from .unityversion import UnityVersion
 
 TPK_URL = "https://nightly.link/AssetRipper/Tpk/workflows/{type}_tpk/{branch}/{compression}_file.zip"
 
-BYTE = Struct("b")
 UINT16 = Struct("<H")
 INT32 = Struct("<i")
 INT64 = Struct("<q")
@@ -70,13 +69,13 @@ def read_versions(stream: BinaryIO, count: int) -> List[UnityVersion]:
 
 
 def get_item_for_version(exactVersion: UnityVersion, items: Iterable[Tuple[UnityVersion, T]]) -> T:
-    ret = None
+    ret: Optional[T] = None
     for version, item in items:
         if exactVersion >= version:
             ret = item
         else:
             break
-    if ret:
+    if ret is not None:
         return ret
     raise ValueError("Could not find exact version")
 
@@ -106,6 +105,10 @@ def decompress_lzma(data: bytes, read_decompressed_size: bool = False) -> bytes:
 
 
 __all__ = [
+    "UINT16",
+    "INT32",
+    "INT64",
+    "UINT64",
     "download_tpk",
     "read_string",
     "read_data",

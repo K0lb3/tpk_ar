@@ -10,7 +10,7 @@ else:
 
 from tpk.string import TpkCommonString, TpkStringBuffer
 from tpk.unity import TpkClassInformation, TpkUnityNodeBuffer
-from tpk.utils import BYTE, INT32, INT64, read_data, read_string, read_version, read_versions
+from tpk.utils import INT32, INT64, read_data, read_string, read_version, read_versions
 
 from .enums import TpkDataType
 from .unityversion import UnityVersion
@@ -92,7 +92,7 @@ class TpkCollectionBlob(TpkDataBlob):
             # relativePath, data
             (
                 read_string(stream),
-                TpkDataBlob.parse_with_type(TpkDataType(BYTE.unpack(stream.read(1))[0]), stream, version),
+                TpkDataBlob.parse_with_type(TpkDataType(stream.read(1)[0]), stream, version),
             )
             for _ in range(count)
         ]

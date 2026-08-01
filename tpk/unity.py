@@ -10,7 +10,7 @@ from .utils import INT32, UINT16, get_item_for_version, read_version
 @dataclass(unsafe_hash=True, frozen=True)
 class TpkUnityClass:
     __slots__ = ("Name", "Base", "Flags", "EditorRootNode", "ReleaseRootNode")
-    ParserStruct: ClassVar[Struct] = Struct("<HHb")
+    ParserStruct: ClassVar[Struct] = Struct("<HHB")
     Name: int
     Base: int
     Flags: TpkUnityClassFlags
@@ -20,20 +20,25 @@ class TpkUnityClass:
     @classmethod
     def parse(cls, stream: BinaryIO) -> "TpkUnityClass":
         Name, Base, Flags = TpkUnityClass.ParserStruct.unpack(stream.read(TpkUnityClass.ParserStruct.size))
-        flags = TpkUnityClassFlags(Flags)
         editorRootNode = releaseRootNode = None
-        if flags & TpkUnityClassFlags.HasEditorRootNode:
+        if Flags & TpkUnityClassFlags.HasEditorRootNode:
             (editorRootNode,) = UINT16.unpack(stream.read(UINT16.size))
-        if flags & TpkUnityClassFlags.HasReleaseRootNode:
+        if Flags & TpkUnityClassFlags.HasReleaseRootNode:
             (releaseRootNode,) = UINT16.unpack(stream.read(UINT16.size))
 
-        return cls(Name=Name, Base=Base, Flags=flags, EditorRootNode=editorRootNode, ReleaseRootNode=releaseRootNode)
+        return cls(
+            Name=Name,
+            Base=Base,
+            Flags=TpkUnityClassFlags(Flags),
+            EditorRootNode=editorRootNode,
+            ReleaseRootNode=releaseRootNode,
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "Name": self.Name,
             "Base": self.Base,
-            "Flags": self.Flags,
+            "Flags": TpkUnityClassFlags(self.Flags),
             "EditorRootNode": self.EditorRootNode,
             "ReleaseRootNode": self.ReleaseRootNode,
         }
@@ -71,14 +76,14 @@ class TpkUnityNode:
         "MetaFlag",
         "SubNodes",
     )
-    ParserStruct: ClassVar[Struct] = Struct("<HHihbIH")
+    ParserStruct: ClassVar[Struct] = Struct("<HHihBIH")
     TypeName: int
     Name: int
     ByteSize: int
     Version: int
     TypeFlags: int
     MetaFlag: int
-    SubNodes: List[int]
+    SubNodes: Tuple[int]
 
     @classmethod
     def parse(cls, stream: BinaryIO) -> "TpkUnityNode":
@@ -93,7 +98,7 @@ class TpkUnityNode:
         ) = cls.ParserStruct.unpack(stream.read(cls.ParserStruct.size))
 
         SubNodeStruct = Struct(f"<{count}H")
-        SubNodes = list(SubNodeStruct.unpack(stream.read(SubNodeStruct.size)))
+        SubNodes = SubNodeStruct.unpack(stream.read(SubNodeStruct.size))
 
         return cls(
             TypeName=TypeName,

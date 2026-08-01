@@ -12,7 +12,7 @@ TPK_VERSIONS = [1, 2]
 
 @dataclass(unsafe_hash=True, frozen=True)
 class TpkFile:
-    ParserStruct: ClassVar[Struct] = Struct("<IbbbbIII")
+    ParserStruct: ClassVar[Struct] = Struct("<IBBBBIII")
     TpkMagicBytes: ClassVar[int] = 0x2A4B5054  # b"TPK*"
     TpkVersionNumber: int
     CompressionType: TpkCompressionType
@@ -74,6 +74,7 @@ class TpkFile:
         else:
             raise Exception("Invalid compression type")
 
+        assert len(decompressed) == self.UncompressedSize, "Decompressed size does not match uncompressed size"
         return TpkDataBlob.parse_with_type(self.DataType, BytesIO(decompressed), self.TpkVersionNumber)
 
 
