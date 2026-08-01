@@ -1,3 +1,4 @@
+import lzma
 from io import BytesIO
 from struct import Struct
 from typing import BinaryIO, Iterable, List, Literal, Tuple, TypeVar
@@ -6,7 +7,7 @@ from zipfile import ZipFile
 
 from .unityversion import UnityVersion
 
-TPK_URL = "https://nightly.link/AssetRipper/Tpk/workflows/{type}_tpk/{version}/{compression}_file.zip"
+TPK_URL = "https://nightly.link/AssetRipper/Tpk/workflows/{type}_tpk/{branch}/{compression}_file.zip"
 
 BYTE = Struct("b")
 UINT16 = Struct("<H")
@@ -19,14 +20,14 @@ T = TypeVar("T")
 
 def download_tpk(
     type: Literal["type_tree", "engine_assets"] = "type_tree",
-    compression: Literal["brotli", "lz4", "lzma", "uncompressed"] = "brotli",
-    version: str = "master",
+    compression: Literal["brotli", "lz4", "lzma", "uncompressed"] = "lzma",
+    branch: str = "master",
     verify: bool = True,
 ) -> bytes:
     # local import to avoid circular import
     from .file import TpkFile
 
-    url = TPK_URL.format(type=type, version=version, compression=compression)
+    url = TPK_URL.format(type=type, branch=branch, compression=compression)
     res = urlopen(url)
     if res.status != 200:
         raise Exception(f"Failed to download TPK file: {res.status} {res.reason}")
@@ -81,8 +82,6 @@ def get_item_for_version(exactVersion: UnityVersion, items: Iterable[Tuple[Unity
 
 
 def decompress_lzma(data: bytes, read_decompressed_size: bool = False) -> bytes:
-    import lzma
-
     LZMA_STRUCT = Struct("<BI")
 
     props, dict_size = LZMA_STRUCT.unpack(data[:5])

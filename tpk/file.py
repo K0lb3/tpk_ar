@@ -10,7 +10,7 @@ from .utils import decompress_lzma
 TPK_VERSIONS = [1, 2]
 
 
-@dataclass
+@dataclass(unsafe_hash=True, frozen=True)
 class TpkFile:
     ParserStruct: ClassVar[Struct] = Struct("<IbbbbIII")
     TpkMagicBytes: ClassVar[int] = 0x2A4B5054  # b"TPK*"
@@ -74,7 +74,7 @@ class TpkFile:
         else:
             raise Exception("Invalid compression type")
 
-        return TpkDataBlob.parse_unk(self.DataType, BytesIO(decompressed), self.TpkVersionNumber)
+        return TpkDataBlob.parse_with_type(self.DataType, BytesIO(decompressed), self.TpkVersionNumber)
 
 
 __all__ = ["TpkFile", "TPK_VERSIONS"]

@@ -6,9 +6,7 @@ readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
 dependencies = [
-    "lz4",
-    "brotli",
-    "typing_extensions",
+    "typing_extensions; python_version<'3.11'"
 ]
 dynamic = ["version"]
 
@@ -16,8 +14,10 @@ dynamic = ["version"]
 tpk_helper = "tpk.cli:main"
 
 [project.optional-dependencies]
-# optional dependencies must be lowercase/normalized
-tests = ["pytest"]
+brotli = ["brotli"]
+lz4 = ["lz4"]
+full = ["brotli", "lz4"]
+tests = ["pytest", "tpk[full]"]
 dev = ["ruff", "tpk[tests]"]
 
 [project.urls]

@@ -32,7 +32,7 @@ class TpkCommonString(ABC):
     def BuildMap(self, buffer: TpkStringBuffer, version: Optional[UnityVersion] = None) -> Dict[int, str]: ...
 
 
-@dataclass
+@dataclass(unsafe_hash=True, frozen=True)
 class TpkCommonStringV1(TpkCommonString):
     __slots__ = ("VersionInformation", "StringBufferIndices")
     VersionInformation: List[Tuple[UnityVersion, int]]
@@ -68,7 +68,7 @@ class TpkCommonStringV1(TpkCommonString):
         return ret
 
 
-@dataclass
+@dataclass(unsafe_hash=True, frozen=True)
 class TpkCommonStringV2(TpkCommonString):
     VersionInformation: Dict[UnityVersion, List["TpkCommonStringV2.Entry"]]
 

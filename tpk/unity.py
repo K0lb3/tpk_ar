@@ -2,13 +2,12 @@ from dataclasses import dataclass
 from struct import Struct
 from typing import Any, BinaryIO, ClassVar, Dict, List, Optional, Tuple
 
-from tpk_helper.unityversion import UnityVersion
-
 from .enums import TpkUnityClassFlags
+from .unityversion import UnityVersion
 from .utils import INT32, UINT16, get_item_for_version, read_version
 
 
-@dataclass
+@dataclass(unsafe_hash=True, frozen=True)
 class TpkUnityClass:
     __slots__ = ("Name", "Base", "Flags", "EditorRootNode", "ReleaseRootNode")
     ParserStruct: ClassVar[Struct] = Struct("<HHb")
@@ -39,22 +38,6 @@ class TpkUnityClass:
             "ReleaseRootNode": self.ReleaseRootNode,
         }
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, TpkUnityClass):
-            return False
-        return self.to_dict() == other.to_dict()
-
-    def __hash__(self) -> int:
-        return hash(
-            (
-                self.Name,
-                self.Base,
-                self.Flags,
-                self.EditorRootNode,
-                self.ReleaseRootNode,
-            )
-        )
-
 
 class TpkClassInformation(List[Tuple[UnityVersion, Optional[TpkUnityClass]]]):
     ID: int
@@ -77,7 +60,7 @@ class TpkClassInformation(List[Tuple[UnityVersion, Optional[TpkUnityClass]]]):
         return get_item_for_version(version, self)
 
 
-@dataclass
+@dataclass(unsafe_hash=True, frozen=True)
 class TpkUnityNode:
     __slots__ = (
         "TypeName",
@@ -121,10 +104,6 @@ class TpkUnityNode:
             MetaFlag=MetaFlag,
             SubNodes=SubNodes,
         )
-
-    def __hash__(self) -> int:
-        # TODO
-        return hash(self.__dict__)
 
 
 class TpkUnityNodeBuffer(List[TpkUnityNode]):

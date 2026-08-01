@@ -1,8 +1,12 @@
+import sys
 from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
 from typing import BinaryIO, ClassVar, Dict, List, Tuple
 
-from typing_extensions import Self
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
 
 from tpk.string import TpkCommonString, TpkStringBuffer
 from tpk.unity import TpkClassInformation, TpkUnityNodeBuffer
@@ -21,7 +25,7 @@ class TpkDataBlob(metaclass=ABCMeta):
     def parse(cls, stream: BinaryIO, version: int = 2) -> Self: ...
 
     @staticmethod
-    def parse_unk(tpk_type: TpkDataType, stream: BinaryIO, version: int = 2) -> "TpkDataBlob":
+    def parse_with_type(tpk_type: TpkDataType, stream: BinaryIO, version: int = 2) -> "TpkDataBlob":
         if tpk_type == TpkDataType.TypeTreeInformation:
             return TpkTypeTreeBlob.parse(stream, version)
         elif tpk_type == TpkDataType.Collection:
@@ -35,10 +39,8 @@ class TpkDataBlob(metaclass=ABCMeta):
         else:
             raise Exception("Unimplemented TpkDataType -> Blob conversion")
 
-        raise NotImplementedError("TpkDataBlob is an abstract class")
 
-
-@dataclass
+@dataclass(unsafe_hash=True, frozen=True)
 class TpkTypeTreeBlob(TpkDataBlob):
     __slots__ = (
         "CreationTime",
@@ -77,7 +79,7 @@ class TpkTypeTreeBlob(TpkDataBlob):
         )
 
 
-@dataclass
+@dataclass(unsafe_hash=True, frozen=True)
 class TpkCollectionBlob(TpkDataBlob):
     __slots__ = "Blobs"
     Blobs: List[Tuple[str, TpkDataBlob]]
@@ -88,13 +90,16 @@ class TpkCollectionBlob(TpkDataBlob):
         (count,) = INT32.unpack(stream.read(INT32.size))
         Blobs = [
             # relativePath, data
-            (read_string(stream), TpkDataBlob.parse_unk(TpkDataType(BYTE.unpack(stream.read(1))[0]), stream, version))
+            (
+                read_string(stream),
+                TpkDataBlob.parse_with_type(TpkDataType(BYTE.unpack(stream.read(1))[0]), stream, version),
+            )
             for _ in range(count)
         ]
         return cls(Blobs=Blobs)
 
 
-@dataclass
+@dataclass(unsafe_hash=True, frozen=True)
 class TpkFileSystemBlob(TpkDataBlob):
     __slots__ = ("Files",)
     # TODO: check if dict might be better
@@ -112,7 +117,7 @@ class TpkFileSystemBlob(TpkDataBlob):
         return cls(Files=Files)
 
 
-@dataclass
+@dataclass(unsafe_hash=True, frozen=True)
 class TpkJsonBlob(TpkDataBlob):
     __slots__ = "Text"
     Text: str
@@ -124,7 +129,7 @@ class TpkJsonBlob(TpkDataBlob):
         return cls(Text=Text)
 
 
-@dataclass
+@dataclass(unsafe_hash=True, frozen=True)
 class TpkEngineAssetsBlob(TpkDataBlob):
     __slots__ = ("CreationTime", "Versions", "Data")
     CreationTime: int
