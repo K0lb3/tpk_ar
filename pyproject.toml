@@ -10,15 +10,12 @@ dependencies = [
 ]
 dynamic = ["version"]
 
-[project.scripts]
-tpk_helper = "tpk.cli:main"
-
 [project.optional-dependencies]
 brotli = ["brotli"]
 lz4 = ["lz4"]
 full = ["brotli", "lz4"]
 tests = ["pytest", "tpk[full]"]
-dev = ["ruff", "tpk[tests]"]
+dev = ["ruff", "pyperf", "snakeviz", "tpk[tests]"]
 
 [project.urls]
 "Homepage" = "https://github.com/K0lb3/tpk"

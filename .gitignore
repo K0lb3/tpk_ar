@@ -59,6 +59,10 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
+# benchmark artifacts
+profiles/
+*.prof
+
 # Translations
 *.mo
 *.pot
