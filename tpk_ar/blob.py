@@ -16,7 +16,6 @@ from .utils import INT32, INT64, read_data, read_string, read_version, read_vers
 
 
 class TpkDataBlob(metaclass=ABCMeta):
-    __slots__ = ("DataType",)
     DataType: ClassVar[TpkDataType]
 
     @classmethod
@@ -51,7 +50,7 @@ class TpkTypeTreeBlob(TpkDataBlob):
     )
     CreationTime: int
     Versions: List[UnityVersion]
-    ClassInformation: Dict[int, TpkClassInformation]  # List[TpkClassInformation]
+    ClassInformation: Dict[int, TpkClassInformation]
     CommonString: TpkCommonString
     NodeBuffer: TpkUnityNodeBuffer
     StringBuffer: TpkStringBuffer
@@ -80,7 +79,7 @@ class TpkTypeTreeBlob(TpkDataBlob):
 
 @dataclass(unsafe_hash=True, frozen=True)
 class TpkCollectionBlob(TpkDataBlob):
-    __slots__ = "Blobs"
+    __slots__ = ("Blobs",)
     Blobs: List[Tuple[str, TpkDataBlob]]
     DataType: ClassVar[TpkDataType] = TpkDataType.Collection
 
@@ -118,7 +117,7 @@ class TpkFileSystemBlob(TpkDataBlob):
 
 @dataclass(unsafe_hash=True, frozen=True)
 class TpkJsonBlob(TpkDataBlob):
-    __slots__ = "Text"
+    __slots__ = ("Text",)
     Text: str
     DataType: ClassVar[TpkDataType] = TpkDataType.Json
 

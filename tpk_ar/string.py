@@ -92,6 +92,7 @@ class TpkCommonStringV1(TpkCommonString):
 
 @dataclass(unsafe_hash=True, frozen=True)
 class TpkCommonStringV2(TpkCommonString):
+    __slots__ = ("VersionInformation",)
     VersionInformation: Dict[UnityVersion, List["TpkCommonStringV2.Entry"]]
 
     class Entry(NamedTuple):
