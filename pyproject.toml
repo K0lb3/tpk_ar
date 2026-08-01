@@ -1,5 +1,5 @@
 [project]
-name = "tpk"
+name = "tpk_ar"
 authors = [{ name = "Rudolf Kolbe", email = "rkolbe96@tuta.io" }]
 description = "A package for parsing type tree packages (TPK)"
 readme = "README.md"
@@ -14,15 +14,15 @@ dynamic = ["version"]
 brotli = ["brotli"]
 lz4 = ["lz4"]
 full = ["brotli", "lz4"]
-tests = ["pytest", "tpk[full]"]
-dev = ["ruff", "pyperf", "snakeviz", "tpk[tests]"]
+tests = ["pytest", "tpk_ar[full]"]
+dev = ["ruff", "pyperf", "snakeviz", "tpk_ar[tests]"]
 
 [project.urls]
-"Homepage" = "https://github.com/K0lb3/tpk"
-"Bug Tracker" = "https://github.com/K0lb3/tpk/issues"
+"Homepage" = "https://github.com/K0lb3/tpk_ar"
+"Bug Tracker" = "https://github.com/K0lb3/tpk_ar/issues"
 
 [tool.setuptools.dynamic]
-version = { attr = "tpk.__version__" }
+version = { attr = "tpk_ar.__version__" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

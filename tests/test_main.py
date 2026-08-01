@@ -4,9 +4,9 @@ from typing import NamedTuple
 
 import pytest
 
-from tpk.blob import TpkEngineAssetsBlob, TpkTypeTreeBlob
-from tpk.enums import TpkCompressionType, TpkDataType
-from tpk.file import TpkFile
+from tpk_ar.blob import TpkEngineAssetsBlob, TpkTypeTreeBlob
+from tpk_ar.enums import TpkCompressionType, TpkDataType
+from tpk_ar.file import TpkFile
 
 SAMPLES_PATH = os.path.join(os.path.dirname(__file__), "samples")
 

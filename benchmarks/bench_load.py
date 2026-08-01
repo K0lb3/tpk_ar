@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tpk.file import TpkFile
+from tpk_ar.file import TpkFile
 
 
 DEFAULT_SAMPLE = ROOT / "tests" / "samples" / "type_tree" / "v2" / "uncompressed.tpk"

@@ -1,7 +1,7 @@
 target-version = "py38"
 include = [
-    "tpk/*.py",
-    "tests/*py",
+    "tpk_ar/*.py",
+    "tests/*.py",
 ]
 line-length = 120
 
@@ -23,5 +23,5 @@ convention = "numpy"
 
 [lint.per-file-ignores]
 # Ignore docstring requirements for test files
-"tpk/__init__.py" = ["F401"]
+"tpk_ar/__init__.py" = ["F401"]
 "tests/**/*.py" = ["D"]

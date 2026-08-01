@@ -8,12 +8,11 @@ if sys.version_info >= (3, 11):
 else:
     from typing_extensions import Self
 
-from tpk.string import TpkCommonString, TpkStringBuffer
-from tpk.unity import TpkClassInformation, TpkUnityNodeBuffer
-from tpk.utils import INT32, INT64, read_data, read_string, read_version, read_versions
-
 from .enums import TpkDataType
+from .string import TpkCommonString, TpkStringBuffer
+from .unity import TpkClassInformation, TpkUnityNodeBuffer
 from .unityversion import UnityVersion
+from .utils import INT32, INT64, read_data, read_string, read_version, read_versions
 
 
 class TpkDataBlob(metaclass=ABCMeta):

@@ -1,4 +1,4 @@
-# Tpk
+# tpk_ar
 
 A Python port of [AssetRipper/Tpk](https://github.com/AssetRipper/Tpk), primarily for use in UnityPy.
 
@@ -11,9 +11,9 @@ Rather than acting as an exact mirror of the upstream project, this port focuses
 The `brotli` and `lz4` dependencies are optional. To handle compressed Tpk files, install the package with the required extras:
 
 ```bash
-pip install "tpk[brotli]"
-pip install "tpk[lz4]"
-pip install "tpk[full]"  # Installs both
+pip install "tpk_ar[brotli]"
+pip install "tpk_ar[lz4]"
+pip install "tpk_ar[full]"  # Installs both
 ```
 
 ## Development
